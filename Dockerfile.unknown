@@ -1,0 +1,25 @@
+# Use an official Python 2.7 runtime as a parent image
+FROM python:3.9.12-slim-buster
+
+#RUN python -m pip install --upgrade "pip<21.0"
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy the requirements file into the container
+COPY requirements.txt ./
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
+RUN apt-get update && apt-get install -y libglib2.0-0
+# Copy the current directory contents into the container at /usr/src/app
+COPY . .
+
+# Make port 80 available to the world outside this container
+EXPOSE 5000
+
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
+CMD ["python", "app.py"]
